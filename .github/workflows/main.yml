@@ -20,4 +20,4 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh ubuntu@81.181.199.140 "cd /home/dionix/ && git pull && pm2 restart dionix-site"
+          ssh ubuntu@81.181.199.140 "sudo cd /home/dionix/ && sudo git pull && sudo pm2 restart dionix-site"
