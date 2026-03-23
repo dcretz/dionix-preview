@@ -3,14 +3,13 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main   # sau branch-ul pe care vrei să faci deploy automat
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up SSH
@@ -18,6 +17,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-      - name: Deploy to VPS
-        run: |
-          ssh ubuntu@81.181.199.140 "cd /home/dionix/ && git pull && sudo pm2 restart dionix-site"
+      - name: Add VPS to known_hosts
+        run: ssh-keyscan -H 81.181.199.140 >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: ssh ubuntu@81.181.199.140 "cd /home/dionix && git pull && sudo pm2 reload dionix-site"
