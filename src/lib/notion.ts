@@ -421,3 +421,33 @@ export async function createSubscriber({ email, source, date }: { email: string;
     },
   });
 }
+
+export async function updateUnsubscribeByToken({ token }: { token: string }) {
+  const databaseId = process.env.NOTION_SUBSCRIBERS_DATABASE_ID;
+  if (!databaseId) return;
+
+    const search = await notion.databases.query({
+      database_id: databaseId,
+      filter: {
+        property: "Token",
+        formula: {
+          string: {
+            equals: token
+          }
+        }
+      }
+    })
+
+    if (!search.results.length) return false
+
+    const pageId = search.results[0].id
+
+    await notion.pages.update({
+      page_id: pageId,
+      properties: {
+        Status: { select: { name: "Stop" } },
+      },
+    })
+
+    return true
+}
