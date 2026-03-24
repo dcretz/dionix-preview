@@ -21,4 +21,4 @@ jobs:
         run: ssh-keyscan -H 81.181.199.140 >> ~/.ssh/known_hosts
 
       - name: Deploy
-        run: ssh ubuntu@81.181.199.140 "cd /home/dionix && git pull && sudo pm2 reload dionix-site"
+        run: ssh ubuntu@81.181.199.140 "cd /home/dionix && git pull && sudo npm install && sudo npm run build && sudo pm2 reload dionix-site"
